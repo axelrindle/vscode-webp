@@ -1,7 +1,7 @@
 {
   "name": "webp-converter",
   "displayName": "WebP Converter",
-  "description": "Covert images to the WebP format.",
+  "description": "Convert images into the WebP format.",
   "version": "0.1.0",
   "publisher": "axelrindle",
   "engines": {
