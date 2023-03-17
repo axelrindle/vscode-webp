@@ -2,6 +2,8 @@
 
 # webp-converter
 
+[![CI](https://github.com/axelrindle/vscode-webp/actions/workflows/main.yml/badge.svg)](https://github.com/axelrindle/vscode-webp/actions/workflows/main.yml)
+
 > VSCode Extension for converting images into the WebP format.
 
 Easily convert PNG, JPG and TIFF files into a [WebP file](https://developers.google.com/speed/webp).
