@@ -1,71 +1,15 @@
-# webp-converter README
+<img src="logo.png" align="right" width="128">
 
-This is the README for your extension "webp-converter". After writing up a brief description, we recommend including the following sections.
+# webp-converter
 
-## Features
+> VSCode Extension for converting images into the WebP format.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Easily convert PNG, JPG and TIFF files into a [WebP file](https://developers.google.com/speed/webp).
 
-For example if there is an image subfolder under your extension project workspace:
+## License
 
-\!\[feature X\]\(images/feature-x.png\)
+[MIT](LICENSE)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Acknowledgements
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Logo generated using [IconKitchen](https://icon.kitchen/i/H4sIAAAAAAAAAzVQQW7DIBD8y%2FaKKtsktexr1Hul%2BlZV1RoW2yoOLoa4UZS%2FZyEJF0bDzswyFzihjbRCewGN%2FrcbaSZoDdqVBJjhYKcFfUjPK%2FEFmgxGG0DApNyRCYUzefxB5q5J0Z0XNgD1EAroh4OzzjP3Uku1r%2FaZ%2Bxwxz61%2FET1lqqP%2FEBlzVnhC2PDE2wlOJw1t8Vo0sizLt7qumkbKndwJUE97mc99jQ%2FUejoO2cwt0FaFAD8NI%2F8hwd6F4OY7tmQym3XvxpAK3AesI2q3cXRInXB4LoWHZqejTZV9wUY9fF9vV%2BtssUUBAAA%3D)

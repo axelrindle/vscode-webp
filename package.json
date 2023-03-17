@@ -23,6 +23,12 @@
     "webp-converter",
     "cwebp"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axelrindle/vscode-webp.git"
+  },
+  "homepage": "https://github.com/axelrindle/vscode-webp#readme",
+  "icon": "logo.png",
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
