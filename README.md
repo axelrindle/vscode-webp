@@ -6,6 +6,21 @@
 
 Easily convert PNG, JPG and TIFF files into a [WebP file](https://developers.google.com/speed/webp).
 
+## Usage
+
+Right-click a PNG, JPG/JPEG or TIFF file and click on `Convert to WebP`.
+
+In it's current state the extension will run the following command:
+
+```shell
+cwebp -preset photo <input> -o <output>.webp
+```
+
+## TODO
+
+- Support flags like `-preset`, `-z` and `-m`
+- Add settings (global and per-user/-workspace)
+
 ## License
 
 [MIT](LICENSE)
