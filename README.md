@@ -38,7 +38,6 @@ Use this if you want to install another version.
 ## TODO
 
 - Support flags like `-preset`, `-z` and `-m`
-- Add settings (global and per-user/-workspace)
 
 ## License
 
