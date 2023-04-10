@@ -3,11 +3,13 @@ import binaryVersion from './commands/binary-version';
 import convert from './commands/convert';
 import deleteBinary from './commands/delete-binary';
 import init from './init';
+import downloadBinary from './commands/download-binary';
 
 export async function activate(context: ExtensionContext) {
     await init();
 
     context.subscriptions.push(commands.registerCommand('webp-converter.execute', convert));
+    context.subscriptions.push(commands.registerCommand('webp-converter.download-binary', downloadBinary));
     context.subscriptions.push(commands.registerCommand('webp-converter.delete-binary', deleteBinary));
     context.subscriptions.push(commands.registerCommand('webp-converter.binary-version', binaryVersion));
 }

@@ -48,6 +48,10 @@
                 "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff)/i"
             },
             {
+                "command": "webp-converter.download-binary",
+                "title": "WebP Converter: Download a specific libwebp version"
+            },
+            {
                 "command": "webp-converter.delete-binary",
                 "title": "WebP Converter: Delete libwebp installation"
             },

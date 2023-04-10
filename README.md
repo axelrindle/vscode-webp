@@ -29,6 +29,10 @@ Does the file conversion. Access via file explorer.
 
 Shows information about the installed binary.
 
+### `webp-converter.download-binary`
+
+Will download the chosen version of libwebp if no installation is present.
+
 ### `webp-converter.delete-binary`
 
 Deletes the installed binary.
