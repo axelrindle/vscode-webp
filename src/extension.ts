@@ -2,9 +2,10 @@ import { exec, ExecOptions } from 'child_process';
 import { randomBytes } from 'crypto';
 import { basename, dirname, join } from 'path';
 import { commands, ExtensionContext, FileType, Progress, ProgressLocation, QuickPickItem, Uri, window, workspace } from 'vscode';
+import deleteBinary from './commands/delete-binary';
 import { install, loadVersions } from './downloader';
-import { clearData, testForConverter } from './util';
 import { Version } from './types';
+import { testForConverter } from './util';
 
 async function init() {
 	try {
@@ -111,10 +112,7 @@ export async function activate(context: ExtensionContext) {
 		});
 	});
 
-	let cmdDeleteBinary = commands.registerCommand('webp-converter.delete-binary', async () => {
-		await clearData();
-		window.showInformationMessage('WebP Converter binaries cleared.');
-	});
+	let cmdDeleteBinary = commands.registerCommand('webp-converter.delete-binary', deleteBinary);
 
 	context.subscriptions.push(cmdExecute);
 	context.subscriptions.push(cmdDeleteBinary);
