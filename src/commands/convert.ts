@@ -2,6 +2,7 @@ import { ExecOptions, exec } from 'child_process';
 import { randomBytes } from 'crypto';
 import { basename, dirname, join } from 'path';
 import { FileType, Progress, ProgressLocation, Uri, window, workspace } from 'vscode';
+import { converterBinary } from '../util';
 
 async function doConvert(directory: string, file: string, progress: Progress<any>): Promise<void> {
 	let filename: string = file.split('.')[0];
@@ -30,7 +31,7 @@ async function doConvert(directory: string, file: string, progress: Progress<any
 		// ignore ¯\_(ツ)_/¯
 	}
 
-	const cmd = `cwebp -preset photo ${directory}/${file} -o ${fileNew}`;
+	const cmd = `${await converterBinary()} -preset photo ${directory}/${file} -o ${fileNew}`;
 	const opts: ExecOptions = {
 		cwd: directory,
 		timeout: 30000 // TODO: Make timeout configurable

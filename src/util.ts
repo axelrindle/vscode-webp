@@ -14,6 +14,10 @@ export async function dataDirectory(...relatives: string[]): Promise<string> {
     return join(dir, ...relatives);
 }
 
+export async function converterBinary(): Promise<string> {
+    return await dataDirectory('libwebp', 'bin', 'cwebp');
+}
+
 export async function clearData(): Promise<void> {
     await rm(await dataDirectory(), {
         recursive: true,
@@ -22,7 +26,7 @@ export async function clearData(): Promise<void> {
 }
 
 export async function testForConverter(): Promise<void> {
-    const binary = await dataDirectory('libwebp', 'bin', 'cwebp');
+    const binary = await converterBinary();
     return new Promise((resolve, reject) => {
 		exec(binary, error => {
 			if (error) {
