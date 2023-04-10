@@ -3,6 +3,7 @@
 # webp-converter
 
 [![CI](https://github.com/axelrindle/vscode-webp/actions/workflows/main.yml/badge.svg)](https://github.com/axelrindle/vscode-webp/actions/workflows/main.yml)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/axelrindle.webp-converter)](https://marketplace.visualstudio.com/items?itemName=axelrindle.webp-converter)
 
 > VSCode Extension for converting images into the WebP format.
 
