@@ -4,12 +4,12 @@ import { dirname, join } from 'path';
 import { Version } from './types';
 
 export async function dataDirectory(...relatives: string[]): Promise<string> {
-	const dir = join(dirname(__dirname), '_data');
-	try {
-		await access(dir);
-	} catch (error) {
-		await mkdir(dir);
-	}
+    const dir = join(dirname(__dirname), '_data');
+    try {
+        await access(dir);
+    } catch (error) {
+        await mkdir(dir);
+    }
 
     return join(dir, ...relatives);
 }
@@ -28,18 +28,18 @@ export async function clearData(): Promise<void> {
 export async function testForConverter(): Promise<void> {
     const binary = await converterBinary();
     return new Promise((resolve, reject) => {
-		exec(binary, error => {
-			if (error) {
-				reject(error);
-			}
-			else {
-				resolve();
-			}
-		});
-	});   
+        exec(binary, error => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve();
+            }
+        });
+    });
 }
 
-export function platformMatches(version: Version|null): boolean {
+export function platformMatches(version: Version | null): boolean {
     if (version === null) {
         return false;
     }

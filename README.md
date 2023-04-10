@@ -18,6 +18,22 @@ In it's current state the extension will run the following command:
 cwebp -preset photo <input> -o <output>.webp
 ```
 
+## Commands
+
+### `webp-converter.execute`
+
+Does the file conversion. Access via file explorer.
+
+### `webp-converter.binary-version`
+
+Shows information about the installed binary.
+
+### `webp-converter.delete-binary`
+
+Deletes the installed binary.
+
+Use this if you want to install another version.
+
 ## TODO
 
 - Support flags like `-preset`, `-z` and `-m`

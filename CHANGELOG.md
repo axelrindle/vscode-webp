@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Binary Download: Instead of relying on the `cwebp` binary being installed on the system, the
 extension will now download a binary itself.
+
 - Prefer System Binary: A user may configure to prefer a binary found on the system. The default
 is to use the downloaded binary.
 

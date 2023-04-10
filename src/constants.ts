@@ -20,5 +20,5 @@ libwebp-0.4.2-linux-x86-64.tar.gz
 libwebp-0.4.2-windows-x64.zip
 libwebp-0.4.2-windows-x86.zip
 libwebp-0.4.2-mac-10.8.tar.gz
-libwebp-0.4.2-rc2-windows-x86.zip 
+libwebp-0.4.2-rc2-windows-x86.zip
 */

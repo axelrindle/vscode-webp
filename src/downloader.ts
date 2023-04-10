@@ -21,7 +21,7 @@ export async function loadVersions(): Promise<Version[]> {
     const $ = load(response.data);
 
     const links = $('pre a');
-    const mapped = links.map<Element, Version>(function() {
+    const mapped = links.map<Element, Version>(function () {
         return {
             name: (this.children[0] as any).data,
             url: this.attribs['href'],
@@ -30,7 +30,7 @@ export async function loadVersions(): Promise<Version[]> {
         };
     })
         .toArray()
-        .map<Version|null>(el => {
+        .map<Version | null>(el => {
             const matches = REGEX_FILENAME.exec(el.name);
 
             if (matches === null) {
