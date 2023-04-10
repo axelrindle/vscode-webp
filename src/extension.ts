@@ -4,6 +4,7 @@ import deleteBinary from './commands/delete-binary';
 import { install, loadVersions } from './downloader';
 import { Version } from './types';
 import { testForConverter } from './util';
+import binaryVersion from './commands/binary-version';
 
 async function init() {
 	try {
@@ -45,6 +46,7 @@ export async function activate(context: ExtensionContext) {
 
 	context.subscriptions.push(commands.registerCommand('webp-converter.execute', convert));
 	context.subscriptions.push(commands.registerCommand('webp-converter.delete-binary', deleteBinary));
+	context.subscriptions.push(commands.registerCommand('webp-converter.binary-version', binaryVersion));
 }
 
 export function deactivate() {}

@@ -40,6 +40,10 @@
       {
         "command": "webp-converter.delete-binary",
         "title": "WebP Converter: Delete libwebp installation"
+      },
+      {
+        "command": "webp-converter.binary-version",
+        "title": "WebP Converter: Show binary version"
       }
     ],
     "menus": {
