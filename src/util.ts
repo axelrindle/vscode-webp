@@ -2,6 +2,8 @@ import { exec } from 'child_process';
 import { access, mkdir, rm } from 'fs/promises';
 import { dirname, join } from 'path';
 import { Version } from './types';
+import { preferSystemBinary } from './settings';
+import init from './init';
 
 export async function dataDirectory(...relatives: string[]): Promise<string> {
     const dir = join(dirname(__dirname), '_data');
@@ -15,6 +17,26 @@ export async function dataDirectory(...relatives: string[]): Promise<string> {
 }
 
 export async function converterBinary(): Promise<string> {
+    await init();
+
+    if (preferSystemBinary()) {
+        try {
+            await new Promise<void>((resolve, reject) => {
+                exec('cwebp', err => {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        resolve();
+                    }
+                });
+            });
+            return 'cwebp';
+        } catch (error) {
+            // ¯\_(ツ)_/¯
+        }
+    }
+
     return await dataDirectory('libwebp', 'bin', 'cwebp');
 }
 

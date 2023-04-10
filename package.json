@@ -31,6 +31,16 @@
     "icon": "logo.png",
     "main": "./out/extension.js",
     "contributes": {
+        "configuration": {
+            "title": "WebP Converter",
+            "properties": {
+                "webp-converter.preferSystemBinary": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Will use a globally available binary of cwebp if available."
+                }
+            }
+        },
         "commands": [
             {
                 "command": "webp-converter.execute",
