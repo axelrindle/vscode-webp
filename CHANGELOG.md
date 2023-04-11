@@ -14,6 +14,8 @@ extension will now download a binary itself.
 - Prefer System Binary: A user may configure to prefer a binary found on the system. The default
 is to use the downloaded binary.
 
+- Convert multiple files at once.
+
 
 ## [v0.1.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.1.0) - 2023-03-17
 

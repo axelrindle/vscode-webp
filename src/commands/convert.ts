@@ -2,7 +2,7 @@ import { ExecOptions, exec } from 'child_process';
 import { randomBytes } from 'crypto';
 import { basename, dirname, join } from 'path';
 import { FileType, Progress, ProgressLocation, Uri, window, workspace } from 'vscode';
-import { converterBinary } from '../util';
+import { commandArgsToUris, converterBinary } from '../util';
 
 async function doConvert(directory: string, file: string, progress: Progress<any>): Promise<void> {
     let filename: string = file.split('.')[0];
@@ -48,25 +48,30 @@ async function doConvert(directory: string, file: string, progress: Progress<any
     });
 }
 
-export default async function convert(uri: Uri): Promise<void> {
-    const { fsPath } = uri;
-    const directory = dirname(fsPath);
-    const file = basename(fsPath);
+export default async function convert(...args: any[]): Promise<void> {
+    const uris = commandArgsToUris(args);
 
     window.withProgress({
         location: ProgressLocation.Notification,
         cancellable: false,
-        title: `Converting ${file} into WebP...`
+        title: `Converting ${uris.length} file(s) into WebP...`
     }, async (progress) => {
-        try {
-            progress.report({ increment: 10 });
-            await doConvert(directory, file, progress);
-            progress.report({ increment: 100 });
-        } catch (error: any) {
-            window.showErrorMessage(`Failed to convert ${file} into a WebP file!`, {
-                detail: error.message
-            });
-            console.error(error);
+        for (const uri of uris) {
+            const { fsPath } = uri;
+            const directory = dirname(fsPath);
+            const filename = basename(fsPath);
+
+            const increment = 100 / uris.length;
+
+            try {
+                await doConvert(directory, filename, progress);
+                progress.report({ increment });
+            } catch (error: any) {
+                window.showErrorMessage(`Failed to convert ${filename} into a WebP file!`, {
+                    detail: error.message
+                });
+                console.error(error);
+            }
         }
     });
 }

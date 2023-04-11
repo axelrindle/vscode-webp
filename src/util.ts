@@ -3,6 +3,7 @@ import { access, mkdir, rm } from 'fs/promises';
 import { dirname, join } from 'path';
 import { preferSystemBinary } from './settings';
 import { Version } from './types';
+import { Uri } from 'vscode';
 
 export async function dataDirectory(...relatives: string[]): Promise<string> {
     const dir = join(dirname(__dirname), '_data');
@@ -73,4 +74,15 @@ export function platformMatches(version: Version | null): boolean {
         default:
             return false;
     }
+}
+
+export function commandArgsToUris(args: any[]): Uri[] {
+	switch (args.length) {
+		case 1:
+			return [args[0]];
+		case 2:
+			return args[1];
+		default:
+			return [];
+	}
 }
