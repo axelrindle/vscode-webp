@@ -39,6 +39,12 @@ Deletes the installed binary.
 
 Use this if you want to install another version.
 
+## Settings
+
+### `webp-converter.preferSystemBinary`
+
+Will use a globally available binary of cwebp if available.
+
 ## TODO
 
 - Support flags like `-preset`, `-z` and `-m`
