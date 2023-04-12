@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## Unreleased
 
+## [v0.2.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.1.0) - 2023-04-12
+
 ### Added
 
 - Binary Download: Instead of relying on the `cwebp` binary being installed on the system, the
