@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import { converterBinary } from '../util';
 import { window } from 'vscode';
+import { preferSystemBinary } from '../settings';
 
 export default async function binaryVersion(): Promise<void> {
     const binary = await converterBinary();
@@ -17,8 +18,12 @@ export default async function binaryVersion(): Promise<void> {
         });
     });
 
-    const msg = `libwebp: ${version.trim()}\n\nInstalled at: \n${binary}`;
-    window.showInformationMessage(msg, {
+    const msg = [
+        `libwebp: ${version.trim()}`,
+        `Installed at: \n${binary}`,
+        `Using system binary: ${preferSystemBinary() ? 'yes' : 'no'}`
+    ];
+    window.showInformationMessage(msg.join('\n\n'), {
         modal: true
     });
 }
