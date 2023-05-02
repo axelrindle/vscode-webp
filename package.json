@@ -2,7 +2,7 @@
     "name": "webp-converter",
     "displayName": "WebP Converter",
     "description": "Convert images into the WebP format.",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "axelrindle",
     "engines": {
         "vscode": "^1.76.0"
@@ -45,7 +45,7 @@
             {
                 "command": "webp-converter.execute",
                 "title": "Convert to WebP",
-                "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff)/i"
+                "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff|tif)/i"
             },
             {
                 "command": "webp-converter.download-binary",
