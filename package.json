@@ -45,7 +45,7 @@
             {
                 "command": "webp-converter.execute",
                 "title": "Convert to WebP",
-                "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff)/i"
+                "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff|tif)/i"
             },
             {
                 "command": "webp-converter.download-binary",

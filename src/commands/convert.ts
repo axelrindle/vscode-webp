@@ -31,7 +31,7 @@ async function doConvert(directory: string, file: string, progress: Progress<any
         // ignore ¯\_(ツ)_/¯
     }
 
-    const cmd = `${await converterBinary()} -preset photo ${directory}/${file} -o ${fileNew}`;
+    const cmd = `${await converterBinary()} -preset photo "${directory}/${file}" -o "${fileNew}"`;
     const opts: ExecOptions = {
         cwd: directory,
         timeout: 30000 // TODO: Make timeout configurable
