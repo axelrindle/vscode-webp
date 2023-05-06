@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "webp-converter",
     "displayName": "WebP Converter",
     "description": "Convert images into the WebP format.",
