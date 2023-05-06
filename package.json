@@ -44,8 +44,7 @@
         "commands": [
             {
                 "command": "webp-converter.execute",
-                "title": "Convert to WebP",
-                "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff|tif)/i"
+                "title": "Convert to WebP"
             },
             {
                 "command": "webp-converter.download-binary",
@@ -64,7 +63,8 @@
             "explorer/context": [
                 {
                     "command": "webp-converter.execute",
-                    "group": "7_modification@99"
+                    "group": "7_modification@99",
+                    "when": "resourceScheme == file && resourceExtname =~ /\\.(png|jpg|jpeg|tiff|tif)$/i"
                 }
             ]
         }
