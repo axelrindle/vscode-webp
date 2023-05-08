@@ -2,9 +2,15 @@
 
 All notable changes to the "webp-converter" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to
+structure this file.
 
 ## Unreleased
+
+### Changed
+
+- The libwebp binaries are now stored in a global location which eliminates the need to
+reinstall the binaries after every extension update.
 
 ## [v0.3.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.3.0) - 2023-05-06
 
@@ -14,7 +20,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-- Extension crash for files containing a space in it's name ([#3](https://github.com/axelrindle/vscode-webp/pull/3))
+- Extension crash for files containing a space in it's name
+([#3](https://github.com/axelrindle/vscode-webp/pull/3))
 
 ## [v0.2.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.1.0) - 2023-04-12
 
