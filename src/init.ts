@@ -1,8 +1,8 @@
-import { ProgressLocation, QuickPickItem, window } from 'vscode';
+import { ExtensionContext, ProgressLocation, QuickPickItem, window } from 'vscode';
 import { install, loadVersions } from './downloader';
-import { Version } from './types';
+import { AxiosProgressCallback, Version } from './types';
 
-export default async function init() {
+export default async function init(context: ExtensionContext) {
     const versions = await loadVersions();
     const choice = await window.showQuickPick(
         versions.map<QuickPickItem>((el, index) => ({
@@ -26,6 +26,8 @@ export default async function init() {
         cancellable: false,
         title: `Installing libwebp v${version?.name}`
     }, async (progress) => {
-        await install(version, event => progress.report({ increment: event.progress }));
+        const callback: AxiosProgressCallback =
+            event => progress.report({ increment: event.progress });
+        await install(context, version, callback);
     });
 }

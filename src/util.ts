@@ -1,22 +1,29 @@
 import { exec } from 'child_process';
-import { access, mkdir, rm } from 'fs/promises';
-import { dirname, join } from 'path';
+import { rm } from 'fs/promises';
+import { join } from 'path';
+import { ExtensionContext, FileType, Uri, workspace } from 'vscode';
 import { preferSystemBinary } from './settings';
 import { Version } from './types';
-import { Uri } from 'vscode';
 
-export async function dataDirectory(...relatives: string[]): Promise<string> {
-    const dir = join(dirname(__dirname), '_data');
+export async function dataDirectory(context: ExtensionContext, ...relatives: string[]): Promise<string> {
+    const dir = context.globalStorageUri;
     try {
-        await access(dir);
+        const stats = await workspace.fs.stat(dir);
+        if (stats.type !== FileType.Directory) {
+            await workspace.fs.delete(dir, {
+                recursive: true,
+                useTrash: false
+            });
+        }
+        throw new Error('Directory not found!');
     } catch (error) {
-        await mkdir(dir);
+        await workspace.fs.createDirectory(dir);
     }
 
-    return join(dir, ...relatives);
+    return join(dir.path, ...relatives);
 }
 
-export async function converterBinary(): Promise<string> {
+export async function converterBinary(context: ExtensionContext): Promise<string> {
     if (preferSystemBinary()) {
         try {
             await new Promise<void>((resolve, reject) => {
@@ -35,18 +42,18 @@ export async function converterBinary(): Promise<string> {
         }
     }
 
-    return await dataDirectory('libwebp', 'bin', 'cwebp');
+    return await dataDirectory(context, 'libwebp', 'bin', 'cwebp');
 }
 
-export async function clearData(): Promise<void> {
-    await rm(await dataDirectory(), {
+export async function clearData(context: ExtensionContext): Promise<void> {
+    await rm(await dataDirectory(context), {
         recursive: true,
         force: true,
     });
 }
 
-export async function testForConverter(): Promise<void> {
-    const binary = await converterBinary();
+export async function testForConverter(context: ExtensionContext): Promise<void> {
+    const binary = await converterBinary(context);
     return new Promise((resolve, reject) => {
         exec(binary, error => {
             if (error) {

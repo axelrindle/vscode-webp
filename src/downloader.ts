@@ -1,14 +1,15 @@
-import axios, { AxiosProgressEvent } from 'axios';
+import axios from 'axios';
 import { Element, load } from 'cheerio';
 import { createWriteStream } from 'fs';
+import { rm } from 'fs/promises';
 import { basename } from 'path';
 import { rcompare } from 'semver';
 import { Stream } from 'stream';
+import { ExtensionContext } from 'vscode';
+import { REGEX_FILENAME, URL_FILE_INDEX } from './constants';
+import { AxiosProgressCallback, Version } from './types';
 import { dataDirectory, platformMatches } from './util';
 import decompress = require('decompress');
-import { rm } from 'fs/promises';
-import { Version } from './types';
-import { REGEX_FILENAME, URL_FILE_INDEX } from './constants';
 
 let versionsCache: Version[] | null = null;
 
@@ -52,9 +53,9 @@ export async function loadVersions(): Promise<Version[]> {
     return versionsCache;
 }
 
-export async function install(version: Version, onDownloadProgress: (event: AxiosProgressEvent) => void): Promise<void> {
+export async function install(context: ExtensionContext, version: Version, onDownloadProgress: AxiosProgressCallback): Promise<void> {
     const filename = basename(version.url);
-    const output = await dataDirectory(filename);
+    const output = await dataDirectory(context, filename);
 
     const response = await axios.get(version.url, {
         responseType: 'stream',
@@ -69,7 +70,7 @@ export async function install(version: Version, onDownloadProgress: (event: Axio
         stream.once('error', error => reject(error));
     });
 
-    await decompress(output, await dataDirectory('libwebp'), {
+    await decompress(output, await dataDirectory(context, 'libwebp'), {
         strip: 1,
     });
     await rm(output);

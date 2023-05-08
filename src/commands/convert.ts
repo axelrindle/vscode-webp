@@ -1,10 +1,10 @@
 import { ExecOptions, exec } from 'child_process';
 import { randomBytes } from 'crypto';
 import { basename, dirname, join } from 'path';
-import { FileType, Progress, ProgressLocation, Uri, window, workspace } from 'vscode';
+import { ExtensionContext, FileType, Progress, ProgressLocation, Uri, window, workspace } from 'vscode';
 import { commandArgsToUris, converterBinary } from '../util';
 
-async function doConvert(directory: string, file: string, progress: Progress<any>): Promise<void> {
+async function doConvert(context: ExtensionContext, directory: string, file: string, progress: Progress<any>): Promise<void> {
     let filename: string = file.split('.')[0];
     if (!filename) {
         filename = 'webp-converted-' + randomBytes(4).toString('hex');
@@ -31,7 +31,7 @@ async function doConvert(directory: string, file: string, progress: Progress<any
         // ignore ¯\_(ツ)_/¯
     }
 
-    const cmd = `${await converterBinary()} -preset photo "${directory}/${file}" -o "${fileNew}"`;
+    const cmd = `${await converterBinary(context)} -preset photo "${directory}/${file}" -o "${fileNew}"`;
     const opts: ExecOptions = {
         cwd: directory,
         timeout: 30000 // TODO: Make timeout configurable
@@ -48,7 +48,7 @@ async function doConvert(directory: string, file: string, progress: Progress<any
     });
 }
 
-export default async function convert(...args: any[]): Promise<void> {
+export default async function convert(context: ExtensionContext, ...args: any[]): Promise<void> {
     const uris = commandArgsToUris(args);
 
     window.withProgress({
@@ -64,7 +64,7 @@ export default async function convert(...args: any[]): Promise<void> {
             const increment = 100 / uris.length;
 
             try {
-                await doConvert(directory, filename, progress);
+                await doConvert(context, directory, filename, progress);
                 progress.report({ increment });
             } catch (error: any) {
                 window.showErrorMessage(`Failed to convert ${filename} into a WebP file!`, {

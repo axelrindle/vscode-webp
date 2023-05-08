@@ -8,16 +8,16 @@ import { testForConverter } from './util';
 
 export async function activate(context: ExtensionContext) {
     try {
-        await testForConverter();
+        await testForConverter(context);
     } catch (error) {
         window.showInformationMessage('Installing libwebp...');
-        await init();
+        await init(context);
     }
 
-    context.subscriptions.push(commands.registerCommand('webp-converter.execute', convert));
-    context.subscriptions.push(commands.registerCommand('webp-converter.download-binary', downloadBinary));
-    context.subscriptions.push(commands.registerCommand('webp-converter.delete-binary', deleteBinary));
-    context.subscriptions.push(commands.registerCommand('webp-converter.binary-version', binaryVersion));
+    context.subscriptions.push(commands.registerCommand('webp-converter.execute', args => convert(context, args)));
+    context.subscriptions.push(commands.registerCommand('webp-converter.download-binary', () => downloadBinary(context)));
+    context.subscriptions.push(commands.registerCommand('webp-converter.delete-binary', () => deleteBinary(context)));
+    context.subscriptions.push(commands.registerCommand('webp-converter.binary-version', () => binaryVersion(context)));
 }
 
 export function deactivate() { }
