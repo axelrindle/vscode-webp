@@ -7,6 +7,8 @@ structure this file.
 
 ## Unreleased
 
+## [v0.4.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.4.0) - 2023-05-08
+
 ### Changed
 
 - The libwebp binaries are now stored in a global location which eliminates the need to
@@ -23,7 +25,7 @@ reinstall the binaries after every extension update.
 - Extension crash for files containing a space in it's name
 ([#3](https://github.com/axelrindle/vscode-webp/pull/3))
 
-## [v0.2.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.1.0) - 2023-04-12
+## [v0.2.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.2.0) - 2023-04-12
 
 ### Added
 
