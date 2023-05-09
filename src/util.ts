@@ -20,7 +20,7 @@ export async function dataDirectory(context: ExtensionContext, ...relatives: str
         await workspace.fs.createDirectory(dir);
     }
 
-    return join(dir.path, ...relatives);
+    return join(dir.fsPath, ...relatives);
 }
 
 export async function converterBinary(context: ExtensionContext): Promise<string> {
