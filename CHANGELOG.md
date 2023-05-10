@@ -7,6 +7,12 @@ structure this file.
 
 ## Unreleased
 
+## [v0.4.1](https://github.com/axelrindle/vscode-webp/releases/tag/v0.4.1) - 2023-05-10
+
+### Fixed
+
+- Binary handling on Windows systems ([#4](https://github.com/axelrindle/vscode-webp/pull/4))
+
 ## [v0.4.0](https://github.com/axelrindle/vscode-webp/releases/tag/v0.4.0) - 2023-05-08
 
 ### Changed
