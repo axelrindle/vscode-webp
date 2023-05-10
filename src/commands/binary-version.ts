@@ -2,8 +2,11 @@ import { exec } from 'child_process';
 import { ExtensionContext, window } from 'vscode';
 import { preferSystemBinary } from '../settings';
 import { converterBinary } from '../util';
+import { precheck } from '../init';
 
 export default async function binaryVersion(context: ExtensionContext): Promise<void> {
+    await precheck(context);
+
     const binary = await converterBinary(context);
     const cmd = `${binary} -version`;
 

@@ -1,6 +1,16 @@
 import { ExtensionContext, ProgressLocation, QuickPickItem, window } from 'vscode';
 import { install, loadVersions } from './downloader';
 import { AxiosProgressCallback, Version } from './types';
+import { testForConverter } from './util';
+
+export async function precheck(context: ExtensionContext) {
+    try {
+        await testForConverter(context);
+    } catch (error) {
+        window.showInformationMessage('Installing libwebp...');
+        await init(context);
+    }
+}
 
 export default async function init(context: ExtensionContext) {
     const versions = await loadVersions();
