@@ -21,6 +21,19 @@ jobs:
         cache: npm
     - run: npm ci
     - run: xvfb-run -a npm test
+      name: Test
       if: runner.os == 'Linux'
     - run: npm test
+      name: Test
       if: runner.os != 'Linux'
+    - run: |
+        timestamp=$(date +%Y%m%d%H%M%S)
+        version=$(npm pkg get version | sed 's/\"//g')
+        npm pkg set version="$version-next+$timestamp"
+    - run: npm run package -- --pre-release
+    - name: Preserve VSIX package
+      uses: actions/upload-artifact@v3
+      with:
+        name: vsix
+        path: '*.vsix'
+        retention-days: 1
