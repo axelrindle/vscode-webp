@@ -1,6 +1,6 @@
 import { WorkspaceConfiguration, workspace } from 'vscode';
 
-function config(): WorkspaceConfiguration {
+export function config(): WorkspaceConfiguration {
     return workspace.getConfiguration('webp-converter');
 }
 

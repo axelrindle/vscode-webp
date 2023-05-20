@@ -32,16 +32,69 @@
     "icon": "logo.png",
     "main": "./out/extension.js",
     "contributes": {
-        "configuration": {
-            "title": "WebP Converter",
-            "properties": {
-                "webp-converter.preferSystemBinary": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Will use a globally available binary of cwebp if available."
+        "configuration": [
+            {
+                "id": "general",
+                "title": "General",
+                "order": 0,
+                "properties": {
+                    "webp-converter.preferSystemBinary": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Will use a globally available binary of cwebp if available."
+                    }
+                }
+            },
+            {
+                "id": "defaults",
+                "title": "Defaults",
+                "order": 1,
+                "properties": {
+                    "webp-converter.defaults.preset": {
+                        "type": "string",
+                        "default": null,
+                        "description": "preset setting",
+                        "enum": [
+                            null,
+                            "default",
+                            "photo",
+                            "picture",
+                            "drawing",
+                            "icon",
+                            "text"
+                        ],
+                        "enumDescriptions": [
+                            "None"
+                        ],
+                        "order": 0
+                    },
+                    "webp-converter.defaults.quality": {
+                        "type": "integer",
+                        "default": 75,
+                        "minimum": 0,
+                        "maximum": 100,
+                        "description": "quality factor (0:small..100:big)",
+                        "order": 1
+                    },
+                    "webp-converter.defaults.alphaQuality": {
+                        "type": "integer",
+                        "default": 100,
+                        "minimum": 0,
+                        "maximum": 100,
+                        "description": "transparency-compression quality",
+                        "order": 2
+                    },
+                    "webp-converter.defaults.compression": {
+                        "type": "integer",
+                        "default": 4,
+                        "minimum": 0,
+                        "maximum": 6,
+                        "description": "compression method (0=fast, 6=slowest)",
+                        "order": 3
+                    }
                 }
             }
-        },
+        ],
         "commands": [
             {
                 "command": "webp-converter.execute",
