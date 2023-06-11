@@ -112,6 +112,10 @@
             {
                 "command": "webp-converter.binary-version",
                 "title": "WebP Converter: Show binary version"
+            },
+            {
+                "command": "webp-converter.check-extension-version",
+                "title": "WebP Converter: Check for extension updates"
             }
         ],
         "menus": {
@@ -154,6 +158,7 @@
         "typescript": "^4.9.5"
     },
     "dependencies": {
+        "@version-checker/core": "^3.0.0",
         "axios": "^1.3.5",
         "cheerio": "^1.0.0-rc.12",
         "decompress": "^4.2.1",
