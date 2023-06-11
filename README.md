@@ -1,4 +1,4 @@
-<img src="logo.png" align="right" width="128">
+![logo](opengraph.png)
 
 # webp-converter
 
@@ -47,7 +47,8 @@ Will use a globally available binary of cwebp if available.
 
 ## TODO
 
-- Support flags like `-preset`, `-z` and `-m`
+- Use a custom view instead of many Quick Picks
+- Allow to create profiles which provide customized defaults
 
 ## License
 
