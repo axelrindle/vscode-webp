@@ -97,9 +97,14 @@
         ],
         "commands": [
             {
-                "command": "webp-converter.execute",
+                "command": "webp-converter.convert.to",
                 "title": "Convert to WebP",
                 "enablement": "resourceScheme == file && resourceExtname =~ /.(png|jpg|jpeg|tiff|tif)/i"
+            },
+            {
+                "command": "webp-converter.convert.from",
+                "title": "Convert from WebP",
+                "enablement": "resourceScheme == file && resourceExtname =~ /.(webp)/i"
             },
             {
                 "command": "webp-converter.download-binary",
@@ -112,16 +117,16 @@
             {
                 "command": "webp-converter.binary-version",
                 "title": "WebP Converter: Show binary version"
-            },
-            {
-                "command": "webp-converter.check-extension-version",
-                "title": "WebP Converter: Check for extension updates"
             }
         ],
         "menus": {
             "explorer/context": [
                 {
-                    "command": "webp-converter.execute",
+                    "command": "webp-converter.convert.to",
+                    "group": "7_modification@99"
+                },
+                {
+                    "command": "webp-converter.convert.from",
                     "group": "7_modification@99"
                 }
             ]

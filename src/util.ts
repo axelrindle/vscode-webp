@@ -3,7 +3,7 @@ import { rm } from 'fs/promises';
 import { join } from 'path';
 import { ExtensionContext, FileType, Uri, workspace } from 'vscode';
 import { preferSystemBinary } from './settings';
-import { Version } from './types';
+import { ConversionMode, Version } from './types';
 
 export async function dataDirectory(context: ExtensionContext, ...relatives: string[]): Promise<string> {
     const dir = context.globalStorageUri;
@@ -23,7 +23,7 @@ export async function dataDirectory(context: ExtensionContext, ...relatives: str
     return join(dir.fsPath, ...relatives);
 }
 
-export async function converterBinary(context: ExtensionContext): Promise<string> {
+export async function converterBinary(context: ExtensionContext, mode: ConversionMode): Promise<string> {
     if (preferSystemBinary()) {
         try {
             await new Promise<void>((resolve, reject) => {
@@ -36,7 +36,14 @@ export async function converterBinary(context: ExtensionContext): Promise<string
                     }
                 });
             });
-            return 'cwebp';
+            switch (mode) {
+                case 'encode':
+                    return 'cwebp';
+                case 'decode':
+                    return 'dwebp';
+                default:
+                    throw new Error(`invalid mode ${mode}!`);
+            }
         } catch (error) {
             // ¯\_(ツ)_/¯
         }
@@ -53,7 +60,7 @@ export async function clearData(context: ExtensionContext): Promise<void> {
 }
 
 export async function testForConverter(context: ExtensionContext): Promise<void> {
-    const binary = await converterBinary(context);
+    const binary = await converterBinary(context, 'encode'); // TODO: Test both?
     return new Promise((resolve, reject) => {
         exec(binary, error => {
             if (error) {

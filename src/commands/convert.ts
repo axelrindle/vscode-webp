@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto';
 import { basename, dirname, join } from 'path';
 import { ExtensionContext, FileType, ProgressLocation, Uri, window, workspace } from 'vscode';
 import { commandArgsToUris, converterBinary } from '../util';
-import { ConversionOptions, IdentifyableQuickPickItem } from '../types';
+import { ConversionMode, ConversionOptions, IdentifyableQuickPickItem } from '../types';
 import { config } from '../settings';
 
 const ID_USE_DEFAULTS = 1;
@@ -20,7 +20,7 @@ function optionsFromDefaults(): ConversionOptions {
 }
 
 function buildCommandOptionString(options: ConversionOptions): string {
-    const result: string[] = [];
+    const result: string[] = ['-mt'];
 
     /**
      * Adds the given command parameter if the value is not undefined
@@ -52,13 +52,13 @@ function buildCommandOptionString(options: ConversionOptions): string {
     return result.join(' ');
 }
 
-async function doConvert(context: ExtensionContext, directory: string, file: string, options: ConversionOptions): Promise<void> {
+async function doConvert(context: ExtensionContext, mode: ConversionMode, directory: string, file: string, options: ConversionOptions): Promise<void> {
     let filename: string = file.split('.')[0];
     if (!filename) {
         filename = 'webp-converted-' + randomBytes(4).toString('hex');
     }
 
-    const fileNew = filename + ".webp";
+    const fileNew = filename + "." + (mode === 'encode' ? "webp" : "png");
     try {
         const stats = await workspace.fs.stat(Uri.file(join(directory, fileNew)));
         if (stats.type === FileType.File || stats.type === FileType.SymbolicLink) {
@@ -69,7 +69,7 @@ async function doConvert(context: ExtensionContext, directory: string, file: str
             });
 
             if (answer !== 'Yes') {
-                window.showInformationMessage('WebP convertion canceled.');
+                window.showInformationMessage('Conversion canceled.');
                 return;
             }
         }
@@ -78,7 +78,8 @@ async function doConvert(context: ExtensionContext, directory: string, file: str
     }
 
     const cmdOptions = buildCommandOptionString(options);
-    const cmd = `${await converterBinary(context)} ${cmdOptions} "${directory}/${file}" -o "${fileNew}"`;
+    const binary = await converterBinary(context, mode);
+    const cmd = `${binary} ${cmdOptions} "${directory}/${file}" -o "${fileNew}"`;
     const opts: ExecOptions = {
         cwd: directory,
         timeout: 30000 // TODO: Make timeout configurable
@@ -95,7 +96,7 @@ async function doConvert(context: ExtensionContext, directory: string, file: str
     });
 }
 
-export default async function convert(context: ExtensionContext, ...args: any[]): Promise<void> {
+export async function encode(context: ExtensionContext, ...args: any[]): Promise<void> {
     const uris = commandArgsToUris(args);
 
     const items: IdentifyableQuickPickItem[] = [
@@ -146,7 +147,35 @@ export default async function convert(context: ExtensionContext, ...args: any[])
             const increment = 100 / uris.length;
 
             try {
-                await doConvert(context, directory, filename, options);
+                await doConvert(context, 'encode', directory, filename, options);
+                progress.report({ increment });
+            } catch (error: any) {
+                window.showErrorMessage(`Failed to convert ${filename} into a WebP file!`, {
+                    detail: error.message
+                });
+                console.error(error);
+            }
+        }
+    });
+}
+
+export async function decode(context: ExtensionContext, ...args: any[]): Promise<void> {
+    const uris = commandArgsToUris(args);
+
+    await window.withProgress({
+        location: ProgressLocation.Notification,
+        cancellable: false,
+        title: `Converting ${uris.length} file(s) into WebP...`
+    }, async (progress) => {
+        for (const uri of uris) {
+            const { fsPath } = uri;
+            const directory = dirname(fsPath);
+            const filename = basename(fsPath);
+
+            const increment = 100 / uris.length;
+
+            try {
+                await doConvert(context, 'decode', directory, filename, {});
                 progress.report({ increment });
             } catch (error: any) {
                 window.showErrorMessage(`Failed to convert ${filename} into a WebP file!`, {

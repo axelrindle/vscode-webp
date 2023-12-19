@@ -7,7 +7,7 @@ import { precheck } from '../init';
 export default async function binaryVersion(context: ExtensionContext): Promise<void> {
     await precheck(context);
 
-    const binary = await converterBinary(context);
+    const binary = await converterBinary(context, 'encode');
     const cmd = `${binary} -version`;
 
     const version = await new Promise<string>((resolve, reject) => {

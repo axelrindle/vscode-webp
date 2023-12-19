@@ -24,3 +24,5 @@ export interface ConversionOptions {
 
     [key: string]: any | undefined
 }
+
+export type ConversionMode = 'encode' | 'decode';
