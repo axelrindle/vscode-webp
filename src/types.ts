@@ -1,7 +1,7 @@
-import { AxiosProgressEvent } from 'axios';
-import { PRESETS } from './constants';
-import { COMPRESSION } from './constants';
-import { QuickPickItem } from 'vscode';
+import { AxiosProgressEvent } from 'axios'
+import { PRESETS } from './constants'
+import { COMPRESSION } from './constants'
+import { QuickPickItem } from 'vscode'
 
 export interface Version {
     name: string

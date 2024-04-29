@@ -1,9 +1,9 @@
-import { WorkspaceConfiguration, workspace } from 'vscode';
+import { WorkspaceConfiguration, workspace } from 'vscode'
 
 export function config(): WorkspaceConfiguration {
-    return workspace.getConfiguration('webp-converter');
+    return workspace.getConfiguration('webp-converter')
 }
 
 export function preferSystemBinary(): boolean {
-    return config().get('preferSystemBinary') ?? false;
+    return config().get('preferSystemBinary') ?? false
 }

@@ -1,19 +1,19 @@
-import { ExtensionContext, ProgressLocation, QuickPickItem, window } from 'vscode';
-import { install, loadVersions } from './downloader';
-import { AxiosProgressCallback, Version } from './types';
-import { testForConverter } from './util';
+import { ExtensionContext, ProgressLocation, QuickPickItem, window } from 'vscode'
+import { install, loadVersions } from './downloader'
+import { AxiosProgressCallback, Version } from './types'
+import { testForConverter } from './util'
 
 export async function precheck(context: ExtensionContext) {
     try {
-        await testForConverter(context);
+        await testForConverter(context)
     } catch (error) {
-        window.showInformationMessage('Installing libwebp...');
-        await init(context);
+        window.showInformationMessage('Installing libwebp...')
+        await init(context)
     }
 }
 
 export default async function init(context: ExtensionContext) {
-    const versions = await loadVersions();
+    const versions = await loadVersions()
     const choice = await window.showQuickPick(
         versions.map<QuickPickItem>((el, index) => ({
             label: el.name,
@@ -23,21 +23,21 @@ export default async function init(context: ExtensionContext) {
         {
             title: 'Select a libwebp version to use.',
         }
-    );
+    )
 
     if (choice === undefined) {
-        window.showErrorMessage('Installation canceled by user!');
-        return;
+        window.showErrorMessage('Installation canceled by user!')
+        return
     }
 
-    const version = versions.find(el => el.name === choice.label && el.arch === choice.description) as Version;
+    const version = versions.find(el => el.name === choice.label && el.arch === choice.description) as Version
     await window.withProgress({
         location: ProgressLocation.Notification,
         cancellable: false,
         title: `Installing libwebp v${version?.name}`
     }, async (progress) => {
         const callback: AxiosProgressCallback =
-            event => progress.report({ increment: event.progress });
-        await install(context, version, callback);
-    });
+            event => progress.report({ increment: event.progress })
+        await install(context, version, callback)
+    })
 }

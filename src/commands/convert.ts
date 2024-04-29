@@ -1,26 +1,26 @@
-import { ExecOptions, exec } from 'child_process';
-import { randomBytes } from 'crypto';
-import { basename, dirname, join } from 'path';
-import { ExtensionContext, FileType, ProgressLocation, Uri, window, workspace } from 'vscode';
-import { commandArgsToUris, converterBinary } from '../util';
-import { ConversionMode, ConversionOptions, IdentifyableQuickPickItem } from '../types';
-import { config } from '../settings';
+import { ExecOptions, exec } from 'child_process'
+import { randomBytes } from 'crypto'
+import { basename, dirname, join } from 'path'
+import { ExtensionContext, FileType, ProgressLocation, Uri, window, workspace } from 'vscode'
+import { commandArgsToUris, converterBinary } from '../util'
+import { ConversionMode, ConversionOptions, IdentifyableQuickPickItem } from '../types'
+import { config } from '../settings'
 
-const ID_USE_DEFAULTS = 1;
-const ID_CUSTOMIZE = 2;
+const ID_USE_DEFAULTS = 1
+const ID_CUSTOMIZE = 2
 
 function optionsFromDefaults(): ConversionOptions {
-    const conf = config();
+    const conf = config()
     return {
         preset: conf.get('defaults.preset') || undefined,
         quality: conf.get('defaults.quality'),
         alphaQuality: conf.get('defaults.alphaQuality'),
         compression: conf.get('defaults.compression'),
-    };
+    }
 }
 
 function buildCommandOptionString(options: ConversionOptions): string {
-    const result: string[] = ['-mt'];
+    const result: string[] = ['-mt']
 
     /**
      * Adds the given command parameter if the value is not undefined
@@ -29,75 +29,75 @@ function buildCommandOptionString(options: ConversionOptions): string {
      */
     function push(param: string, value: any | (() => any)) {
         if (value === undefined) {
-            return;
+            return
         }
 
-        let _value: any = value;
+        let _value: any = value
         if (typeof value === 'function') {
-            _value = value();
+            _value = value()
         }
 
         if (_value === undefined) {
-            return;
+            return
         }
 
-        result.push(`-${param} ${_value}`);
+        result.push(`-${param} ${_value}`)
     }
 
-    push('preset', options.preset);
-    push('q', options.quality);
-    push('alpha_q', options.alphaQuality);
-    push('m', options.compression);
+    push('preset', options.preset)
+    push('q', options.quality)
+    push('alpha_q', options.alphaQuality)
+    push('m', options.compression)
 
-    return result.join(' ');
+    return result.join(' ')
 }
 
 async function doConvert(context: ExtensionContext, mode: ConversionMode, directory: string, file: string, options: ConversionOptions): Promise<void> {
-    let filename: string = file.split('.')[0];
+    let filename: string = file.split('.')[0]
     if (!filename) {
-        filename = 'webp-converted-' + randomBytes(4).toString('hex');
+        filename = 'webp-converted-' + randomBytes(4).toString('hex')
     }
 
-    const fileNew = filename + "." + (mode === 'encode' ? "webp" : "png");
+    const fileNew = filename + '.' + (mode === 'encode' ? 'webp' : 'png')
     try {
-        const stats = await workspace.fs.stat(Uri.file(join(directory, fileNew)));
+        const stats = await workspace.fs.stat(Uri.file(join(directory, fileNew)))
         if (stats.type === FileType.File || stats.type === FileType.SymbolicLink) {
             const answer = await window.showQuickPick(['Yes', 'No'], {
                 title: `The file ${fileNew} does already exist. Overwrite?`,
                 canPickMany: false,
                 ignoreFocusOut: true,
-            });
+            })
 
             if (answer !== 'Yes') {
-                window.showInformationMessage('Conversion canceled.');
-                return;
+                window.showInformationMessage('Conversion canceled.')
+                return
             }
         }
     } catch (error) {
         // ignore ¯\_(ツ)_/¯
     }
 
-    const cmdOptions = buildCommandOptionString(options);
-    const binary = await converterBinary(context, mode);
-    const cmd = `${binary} ${cmdOptions} "${directory}/${file}" -o "${fileNew}"`;
+    const cmdOptions = buildCommandOptionString(options)
+    const binary = await converterBinary(context, mode)
+    const cmd = `${binary} ${cmdOptions} "${directory}/${file}" -o "${fileNew}"`
     const opts: ExecOptions = {
         cwd: directory,
         timeout: 30000 // TODO: Make timeout configurable
-    };
+    }
     return new Promise((resolve, reject) => {
         exec(cmd, opts, error => {
             if (error) {
-                reject(error);
+                reject(error)
             }
             else {
-                resolve();
+                resolve()
             }
-        });
-    });
+        })
+    })
 }
 
 export async function encode(context: ExtensionContext, ...args: any[]): Promise<void> {
-    const uris = commandArgsToUris(args);
+    const uris = commandArgsToUris(args)
 
     const items: IdentifyableQuickPickItem[] = [
         {
@@ -111,27 +111,28 @@ export async function encode(context: ExtensionContext, ...args: any[]): Promise
             label: 'Customize Settings',
             detail: 'Allows you to customize the settings for this conversion only.',
         },
-    ];
+    ]
     const pick = await window.showQuickPick(items, {
         title: 'Choose Mode',
         canPickMany: false,
-    });
+    })
     if (pick === undefined) {
-        window.showErrorMessage('Conversion canceled!');
-        return;
+        window.showErrorMessage('Conversion canceled!')
+        return
     }
-    let options: ConversionOptions;
+
+    let options: ConversionOptions
     switch (pick.id) {
-        case ID_USE_DEFAULTS:
-            options = optionsFromDefaults();
-            break;
-        case ID_CUSTOMIZE: // TODO: Customization
-            options = optionsFromDefaults();
-            window.showInformationMessage('Settings customization is a work-in-progress.');
-            break;
-        default:
-            window.showErrorMessage(`Invalid option #${pick.id}!`);
-            return;
+    case ID_USE_DEFAULTS:
+        options = optionsFromDefaults()
+        break
+    case ID_CUSTOMIZE: // TODO: Customization
+        options = optionsFromDefaults()
+        window.showInformationMessage('Settings customization is a work-in-progress.')
+        break
+    default:
+        window.showErrorMessage(`Invalid option #${pick.id}!`)
+        return
     }
 
     await window.withProgress({
@@ -140,27 +141,27 @@ export async function encode(context: ExtensionContext, ...args: any[]): Promise
         title: `Converting ${uris.length} file(s) into WebP...`
     }, async (progress) => {
         for (const uri of uris) {
-            const { fsPath } = uri;
-            const directory = dirname(fsPath);
-            const filename = basename(fsPath);
+            const { fsPath } = uri
+            const directory = dirname(fsPath)
+            const filename = basename(fsPath)
 
-            const increment = 100 / uris.length;
+            const increment = 100 / uris.length
 
             try {
-                await doConvert(context, 'encode', directory, filename, options);
-                progress.report({ increment });
+                await doConvert(context, 'encode', directory, filename, options)
+                progress.report({ increment })
             } catch (error: any) {
                 window.showErrorMessage(`Failed to convert ${filename} into a WebP file!`, {
                     detail: error.message
-                });
-                console.error(error);
+                })
+                console.error(error)
             }
         }
-    });
+    })
 }
 
 export async function decode(context: ExtensionContext, ...args: any[]): Promise<void> {
-    const uris = commandArgsToUris(args);
+    const uris = commandArgsToUris(args)
 
     await window.withProgress({
         location: ProgressLocation.Notification,
@@ -168,21 +169,21 @@ export async function decode(context: ExtensionContext, ...args: any[]): Promise
         title: `Converting ${uris.length} file(s) into WebP...`
     }, async (progress) => {
         for (const uri of uris) {
-            const { fsPath } = uri;
-            const directory = dirname(fsPath);
-            const filename = basename(fsPath);
+            const { fsPath } = uri
+            const directory = dirname(fsPath)
+            const filename = basename(fsPath)
 
-            const increment = 100 / uris.length;
+            const increment = 100 / uris.length
 
             try {
-                await doConvert(context, 'decode', directory, filename, {});
-                progress.report({ increment });
+                await doConvert(context, 'decode', directory, filename, {})
+                progress.report({ increment })
             } catch (error: any) {
                 window.showErrorMessage(`Failed to convert ${filename} into a WebP file!`, {
                     detail: error.message
-                });
-                console.error(error);
+                })
+                console.error(error)
             }
         }
-    });
+    })
 }
