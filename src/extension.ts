@@ -1,19 +1,27 @@
-import { commands, ExtensionContext } from 'vscode'
-import binaryVersion from './commands/binary-version'
-import { decode, encode } from './commands/convert'
-import deleteBinary from './commands/delete-binary'
-import downloadBinary from './commands/download-binary'
-import { precheck } from './init'
+import { commands, ExtensionContext, window } from 'vscode'
+import binaryVersionCommand from './commands/binary-version'
+import { decodeCommand, encodeCommand } from './commands/convert'
+import deleteBinaryCommand from './commands/delete-binary'
+import downloadBinaryCommand from './commands/download-binary'
+import { Context } from './types'
 
-export async function activate(context: ExtensionContext) {
-    await precheck(context)
+export const EXTENSION_ID = 'webp-converter'
 
-    context.subscriptions.push(commands.registerCommand('webp-converter.convert.to', args => encode(context, args)))
-    context.subscriptions.push(commands.registerCommand('webp-converter.convert.from', args => decode(context, args)))
+export async function activate(extensionContext: ExtensionContext) {
+    const context: Context = {
+        extension: extensionContext,
+        channel: window.createOutputChannel('WebP')
+    }
 
-    context.subscriptions.push(commands.registerCommand('webp-converter.download-binary', () => downloadBinary(context)))
-    context.subscriptions.push(commands.registerCommand('webp-converter.delete-binary', () => deleteBinary(context)))
-    context.subscriptions.push(commands.registerCommand('webp-converter.binary-version', () => binaryVersion(context)))
+    const {
+        subscriptions,
+    } = extensionContext
+
+    subscriptions.push(commands.registerCommand(`${EXTENSION_ID}.convert.to`, args => encodeCommand(context, args)))
+    subscriptions.push(commands.registerCommand(`${EXTENSION_ID}.convert.from`, args => decodeCommand(context, args)))
+    subscriptions.push(commands.registerCommand(`${EXTENSION_ID}.download-binary`, () => downloadBinaryCommand(context)))
+    subscriptions.push(commands.registerCommand(`${EXTENSION_ID}.delete-binary`, () => deleteBinaryCommand(context)))
+    subscriptions.push(commands.registerCommand(`${EXTENSION_ID}.binary-version`, () => binaryVersionCommand(context)))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function

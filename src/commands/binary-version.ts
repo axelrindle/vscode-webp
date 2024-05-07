@@ -1,11 +1,15 @@
 import { exec } from 'child_process'
-import { ExtensionContext, window } from 'vscode'
+import { window } from 'vscode'
 import { preferSystemBinary } from '../settings'
-import { converterBinary } from '../util'
-import { precheck } from '../init'
+import { Context } from '../types'
+import { converterBinary, testForConverter } from '../util'
+import { doDownloadBinary } from './download-binary'
 
-export default async function binaryVersion(context: ExtensionContext): Promise<void> {
-    await precheck(context)
+export default async function binaryVersion(context: Context): Promise<void> {
+    const isInstalled = await testForConverter(context)
+    if (!isInstalled) {
+        await doDownloadBinary(context)
+    }
 
     const binary = await converterBinary(context, 'encode')
     const cmd = `${binary} -version`
@@ -25,8 +29,8 @@ export default async function binaryVersion(context: ExtensionContext): Promise<
         `libwebp: ${version.trim()}`,
         `Installed at: \n${binary}`,
         `Using system binary: ${preferSystemBinary() ? 'yes' : 'no'}`
-    ]
-    window.showInformationMessage(msg.join('\n\n'), {
+    ].join('\n\n')
+    window.showInformationMessage(msg, {
         modal: true
     })
 }

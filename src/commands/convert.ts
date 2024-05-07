@@ -1,10 +1,11 @@
 import { ExecOptions, exec } from 'child_process'
 import { randomBytes } from 'crypto'
 import { basename, dirname, join } from 'path'
-import { ExtensionContext, FileType, ProgressLocation, Uri, window, workspace } from 'vscode'
-import { commandArgsToUris, converterBinary } from '../util'
-import { ConversionMode, ConversionOptions, IdentifyableQuickPickItem } from '../types'
+import { FileType, ProgressLocation, Uri, window, workspace } from 'vscode'
 import { config } from '../settings'
+import { Context, ConversionMode, ConversionOptions, IdentifyableQuickPickItem } from '../types'
+import { commandArgsToUris, converterBinary, testForConverter } from '../util'
+import { doDownloadBinary } from './download-binary'
 
 const ID_USE_DEFAULTS = 1
 const ID_CUSTOMIZE = 2
@@ -52,7 +53,12 @@ function buildCommandOptionString(options: ConversionOptions): string {
     return result.join(' ')
 }
 
-async function doConvert(context: ExtensionContext, mode: ConversionMode, directory: string, file: string, options: ConversionOptions): Promise<void> {
+async function doConvert(context: Context, mode: ConversionMode, directory: string, file: string, options: ConversionOptions): Promise<void> {
+    const isInstalled = await testForConverter(context)
+    if (!isInstalled) {
+        await doDownloadBinary(context)
+    }
+
     let filename: string = file.split('.')[0]
     if (!filename) {
         filename = 'webp-converted-' + randomBytes(4).toString('hex')
@@ -96,7 +102,7 @@ async function doConvert(context: ExtensionContext, mode: ConversionMode, direct
     })
 }
 
-export async function encode(context: ExtensionContext, ...args: any[]): Promise<void> {
+export async function encodeCommand(context: Context, ...args: any[]): Promise<void> {
     const uris = commandArgsToUris(args)
 
     const items: IdentifyableQuickPickItem[] = [
@@ -160,7 +166,7 @@ export async function encode(context: ExtensionContext, ...args: any[]): Promise
     })
 }
 
-export async function decode(context: ExtensionContext, ...args: any[]): Promise<void> {
+export async function decodeCommand(context: Context, ...args: any[]): Promise<void> {
     const uris = commandArgsToUris(args)
 
     await window.withProgress({

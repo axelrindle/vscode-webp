@@ -1,7 +1,10 @@
-import { AxiosProgressEvent } from 'axios'
-import { PRESETS } from './constants'
-import { COMPRESSION } from './constants'
-import { QuickPickItem } from 'vscode'
+import { ExtensionContext, OutputChannel, QuickPickItem } from 'vscode'
+import { COMPRESSION, PRESETS } from './constants'
+
+export interface Context {
+    extension: ExtensionContext
+    channel: OutputChannel
+}
 
 export interface Version {
     name: string
@@ -9,8 +12,6 @@ export interface Version {
     platform: string
     arch: string
 }
-
-export type AxiosProgressCallback = (event: AxiosProgressEvent) => void;
 
 export interface IdentifyableQuickPickItem extends QuickPickItem {
     id: number

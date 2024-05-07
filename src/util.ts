@@ -1,12 +1,12 @@
 import { exec } from 'child_process'
 import { rm } from 'fs/promises'
 import { join } from 'path'
-import { ExtensionContext, FileType, Uri, workspace } from 'vscode'
+import { FileType, Uri, workspace } from 'vscode'
 import { preferSystemBinary } from './settings'
-import { ConversionMode, Version } from './types'
+import { Context, ConversionMode, Version } from './types'
 
-export async function dataDirectory(context: ExtensionContext, ...relatives: string[]): Promise<string> {
-    const dir = context.globalStorageUri
+export async function dataDirectory(context: Context, ...relatives: string[]): Promise<string> {
+    const dir = context.extension.globalStorageUri
     try {
         const stats = await workspace.fs.stat(dir)
         if (stats.type !== FileType.Directory) {
@@ -23,7 +23,7 @@ export async function dataDirectory(context: ExtensionContext, ...relatives: str
     return join(dir.fsPath, ...relatives)
 }
 
-export async function converterBinary(context: ExtensionContext, mode: ConversionMode): Promise<string> {
+export async function converterBinary(context: Context, mode: ConversionMode): Promise<string> {
     if (preferSystemBinary()) {
         try {
             await new Promise<void>((resolve, reject) => {
@@ -52,22 +52,22 @@ export async function converterBinary(context: ExtensionContext, mode: Conversio
     return await dataDirectory(context, 'libwebp', 'bin', 'cwebp')
 }
 
-export async function clearData(context: ExtensionContext): Promise<void> {
+export async function clearData(context: Context): Promise<void> {
     await rm(await dataDirectory(context), {
         recursive: true,
         force: true,
     })
 }
 
-export async function testForConverter(context: ExtensionContext): Promise<void> {
+export async function testForConverter(context: Context): Promise<boolean> {
     const binary = await converterBinary(context, 'encode') // TODO: Test both?
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         exec(binary, error => {
             if (error) {
-                reject(error)
+                resolve(false)
             }
             else {
-                resolve()
+                resolve(true)
             }
         })
     })
