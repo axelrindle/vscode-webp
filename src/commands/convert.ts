@@ -85,7 +85,7 @@ async function doConvert(context: Context, mode: ConversionMode, directory: stri
 
     const cmdOptions = buildCommandOptionString(options)
     const binary = await converterBinary(context, mode)
-    const cmd = `${binary} ${cmdOptions} "${directory}/${file}" -o "${fileNew}"`
+    const cmd = `"${binary}" ${cmdOptions} "${directory}/${file}" -o "${fileNew}"`
     const opts: ExecOptions = {
         cwd: directory,
         timeout: 30000 // TODO: Make timeout configurable
